@@ -27,7 +27,6 @@ def read(filename: str) -> str:
         return text
     except FileNotFoundError as e:
         raise FileNotFoundError(f"Ошибка: файл '{filename}'  не найден : {e}")
-    print(text)
 
 
 def pat(text:str)->list:
@@ -41,22 +40,25 @@ def pat(text:str)->list:
     return names
 
 
-def popular(name:list):
+def popular(name:str)->list:
     """
     finds the most common name
     :param name:list of names
     :return:most common name
     """
     counter=Counter(name)
-    return counter.most_common(1)[0]
+    return counter.most_common(1)
 
 
 def main():
-    filename=openfile()
-    text= read(filename)
-    name=pat(text)
-    counter=popular(name)
-    print(counter)
+    try:
+        filename=openfile()
+        text= read(filename)
+        name=pat(text)
+        counter=popular(name)
+        print(counter)
+    except Exception as e:
+        print(f"Ошибка: {e}")
 
 
 if __name__ == "__main__":
