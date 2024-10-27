@@ -22,7 +22,7 @@ class ImageIterator:
             raise StopIteration
 
 
-    def read(self, path: str) -> list:
+    def __read(self, path: str) -> list:
         """
         :param path: Считывает CSV-файл
         :return: путь
