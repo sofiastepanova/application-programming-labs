@@ -13,7 +13,7 @@ def annotation(pic:str, annotat:str)->None:
         d=['Absolute path' "  " 'Relative path']
         writer = csv.writer(file)
         writer.writerow(d)
-        for filename in os.listdir(pic):
-            r = os.path.relpath(filename, start=pic)
-            a = os.path.abspath(filename)
-            writer.writerow([r, a])
+        for i in os.listdir(pic):
+            a = op.abspath(op.join(pic, i))
+            r = op.relpath(op.join(pic, i), start=".")
+            writer.writerow([a, r])
