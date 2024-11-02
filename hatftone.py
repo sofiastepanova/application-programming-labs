@@ -21,4 +21,4 @@ def image_res(original: ndarray, ht_image: ndarray) -> None:
 
 
 def save_halftone(image: ndarray, output_path: str):
-        cv2.imwrite(output_path, image)
+    cv2.imwrite(output_path, image)
