@@ -4,6 +4,11 @@ from numpy import ndarray
 
 
 def histogram(img:ndarray)->tuple:
+     """
+     Функция создает гистограмму изображения
+     :param img:массив из пикселей
+     :return:гистограмма для каждого канала
+     """
     r = cv2.calcHist(img, [0], None, [256], [0, 256])
     g = cv2.calcHist(img,[1],None,[256],[0,256])
     b = cv2.calcHist(img,[2],None,[256],[0,256])
@@ -11,6 +16,13 @@ def histogram(img:ndarray)->tuple:
 
 
 def draw(r:ndarray,g:ndarray,b:ndarray)->None:
+    """
+     Функция рисует гистограмму на основе переданного массива
+     :param r: данные для гистограммы красного канала
+     :param g: данные для гистограммы зеленого канала
+     :param b: данные для гистограммы синего канала
+     :return: None
+     """
     plt.figure(figsize=(10, 5))
     plt.plot(r, label='Красный канал', color='red')
     plt.plot(g, label='Зеленый канал', color='green')
