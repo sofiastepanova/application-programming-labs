@@ -1,6 +1,6 @@
-from numpy import ndarray
-from os.path import exists
 import cv2
+from os.path import exists
+from numpy import ndarray
 
 
 def l_image(image_path: str) -> ndarray:
