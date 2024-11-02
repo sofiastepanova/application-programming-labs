@@ -1,11 +1,7 @@
 import argparse
-from hatftone import halftone
-from hatftone import image_res
-from hatftone import save_halftone
-from histogram import draw
-from histogram import histogram
-from load import h_w
-from load import l_image
+from hatftone import halftone, image_res, save_halftone
+from histogram import draw, histogram
+from load import h_w, l_image
 
 
 def pars()->tuple:
