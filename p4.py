@@ -78,8 +78,10 @@ def hist(df: pd.DataFrame) -> None:
     :param df: DataFrame
     :return: None
     """
-    df["Area"].plot()
-    plt.title('Histogram of areas')
-    plt.xlabel('Image')
-    plt.ylabel('Area')
+    plt.figure(figsize=(10, 5))
+    plt.hist(df["Area"], color='gray')
+    plt.title('Распределение площадей изображений')
+    plt.xlabel('Площадь (пиксели)')
+    plt.ylabel('Частота')
+    plt.grid(axis='y', alpha=0.75)
     plt.show()
