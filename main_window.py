@@ -14,7 +14,7 @@ class MainWindow(QMainWindow):
         Функция создает главное окно приложения для просмотра изображений
         """
         super().__init__()
-        self.setWindowTitle('Просмотр ')
+        self.setWindowTitle('Просмотр ежиков ')
         self.setGeometry(100, 100, 800, 600)
 
 
@@ -48,48 +48,73 @@ class MainWindow(QMainWindow):
 
     def load_annotation(self) -> None:
         """
-        Функция загружает аннотацию
+        Загружает аннотацию из выбранного файла.
+        """
+        file_name = self._select_annotation_file()
+        if file_name:
+            self._process_annotation_file(file_name)
+
+    def _select_annotation_file(self) -> str:
+        """
+        Открывает диалог выбора файла и возвращает путь к выбранному файлу.
+
+        :return: Путь к файлу аннотации или пустая строка, если файл не выбран.
         """
         options = QFileDialog.Options()
-        file_name, _ = QFileDialog.getOpenFileName(self, "Выберите файл аннотации", options=options)
-        if file_name:
-            try:
-                self.image_iterator = ImageIterator(file_name)
-                QMessageBox.information(self, "Успех", "Файл аннотации загружен.")
-            except Exception as e:
-                QMessageBox.critical(self, "Ошибка", f"Не удалось загрузить файл: {str(e)}")
+        return QFileDialog.getOpenFileName(self, "Выберите файл аннотации", options=options)[0]
 
-    def show_next_image(self) -> None:
+    def _process_annotation_file(self, file_name: str) -> None:
         """
-        Функция отображает следующее изображение
+        Обрабатывает файл аннотации и загружает его.
+
+        :param file_name: Путь к файлу аннотации.
+        """
+        try:
+            self.image_iterator = ImageIterator(file_name)
+            QMessageBox.information(self, "Успех", "Файл аннотации загружен.")
+        except Exception as e:
+            QMessageBox.critical(self, "Ошибка", f"Не удалось загрузить файл: {str(e)}")
+
+
+    def show_next_image(self):
+        """
+        Функция отвечает за отображение следующего изображения из выбранного набора данных.
         """
         if self.image_iterator is None:
-            QMessageBox.warning(self, "Предупреждение", "Сначала загрузите файл аннотации.")
+            self.image_label.setText("Сначала загрузите аннотацию")
             return
+
         try:
-
             image_path = next(self.image_iterator)
-            self.display_image(image_path)
-        except StopIteration:
-            QMessageBox.information(self, "Информация", "Больше изображений нет.")
-        except Exception as e:
-            QMessageBox.critical(self, "Ошибка", f"Не удалось загрузить изображение: {str(e)}")
-
-
-    def display_image(self, image_path) -> None:
-        """
-        Функция отображает изображение
-        :param image_path: абсолютный путь к изображению
-        :return: None
-        """
-        if os.path.exists(image_path):
             pixmap = QPixmap(image_path)
-            if not pixmap.isNull():
-                self.image_label.setPixmap(pixmap.scaled(600, 400, Qt.KeepAspectRatio))
-            else:
-                QMessageBox.warning(self, "Ошибка", f"Не удалось загрузить изображение: {image_path}")
-        else:
-            QMessageBox.warning(self, "Ошибка", f"Файл не найден: {image_path}")
+            self.image_label.setPixmap(
+                pixmap.scaled(
+                    self.image_label.size(),
+                    Qt.KeepAspectRatio,
+                )
+            )
+        except StopIteration:
+            self.image_label.setText("больше ежиков нет")
+
+    def display_image(self, image_path: str) -> None:
+        """
+        Отображает изображение в виджете.
+
+        :param image_path: абсолютный путь к изображению
+        """
+        try:
+            if not os.path.isfile(image_path):
+                raise FileNotFoundError(f"Файл не найден: {image_path}")
+
+            pixmap = QPixmap(image_path)
+            if pixmap.isNull():
+                raise RuntimeError(f"Не удалось загрузить изображение: {image_path}")
+
+            scaled_pixmap = pixmap.scaled(600, 400, Qt.KeepAspectRatio)
+            self.image_label.setPixmap(scaled_pixmap)
+
+        except (FileNotFoundError, RuntimeError) as e:
+            QMessageBox.warning(self, "Ошибка", str(e))
 
 
 if __name__ == '__main__':
