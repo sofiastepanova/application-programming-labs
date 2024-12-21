@@ -46,6 +46,10 @@ class MainWindow(QMainWindow):
 
         self.image_iterator = None
 
+        self.error_label = QLabel(self)
+        self.error_label.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.error_label)
+
     def load_annotation(self) -> None:
         """
         Загружает аннотацию из выбранного файла.
@@ -71,10 +75,10 @@ class MainWindow(QMainWindow):
         """
         try:
             self.image_iterator = ImageIterator(file_name)
-            QMessageBox.information(self, "Успех", "Файл аннотации загружен.")
-        except Exception as e:
-            QMessageBox.critical(self, "Ошибка", f"Не удалось загрузить файл: {str(e)}")
+            self.error_label.setText("Файл аннотации загружен.")
 
+        except Exception as e:
+            self.error_label.setText(f"Ошибка: Не удалось загрузить файл: {str(e)}")
 
     def show_next_image(self):
         """
