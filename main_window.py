@@ -70,6 +70,8 @@ class MainWindow(QMainWindow):
 
             image_path = next(self.image_iterator)
             self.display_image(image_path)
+        except StopIteration:
+            QMessageBox.information(self, "Информация", "Больше изображений нет.")
         except Exception as e:
             QMessageBox.critical(self, "Ошибка", f"Не удалось загрузить изображение: {str(e)}")
 
