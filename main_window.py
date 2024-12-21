@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
         :return: Путь к файлу аннотации или пустая строка, если файл не выбран.
         """
         options = QFileDialog.Options()
-        return QFileDialog.getOpenFileName(self, "Выберите файл аннотации", options=options)[0]
+        return QFileDialog.getOpenFileName(self, "Выберите файл аннотации","", "CSV Files (*.csv);", options=options)
 
     def _process_annotation_file(self, file_name: str) -> None:
         """
